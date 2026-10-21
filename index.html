@@ -3,314 +3,291 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Centrale — Caffè · Bar · Ristorante · Tübingen</title>
-  <meta name="description" content="Caffè-Bar Centrale in der Tübinger Innenstadt, Doblerstraße 10 – gleich unterhalb vom Amtsgericht. Mittagstisch, Steinofenpizza, frische Pasta, Kaffee und eine der schönsten Terrassen der Stadt." />
-  <meta name="theme-color" content="#110c09" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Manrope:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <title>Centrale · Caffè-Bar in der Doblerstraße, Tübingen</title>
+  <meta name="description" content="Caffè-Bar Centrale, Doblerstraße 10 in Tübingen, unterhalb vom Amtsgericht. Kaffee ab 10 Uhr, Mittagstisch, Pizza aus dem Steinofen, Terrasse mit Brunnen." />
+  <meta name="theme-color" content="#f1e8d9" />
+  <link rel="preload" href="Fraunces-normal-300-700.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="InstrumentSans-normal-400-600.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="stylesheet" href="style.css" />
   <script>if(!matchMedia("(prefers-reduced-motion: reduce)").matches)document.documentElement.classList.add("motion");</script>
-  <!-- Bilder: Platzhalter von Unsplash (lizenzfrei). Vor Livegang durch echte Fotos des Centrale ersetzen. -->
+  <!-- Bilder: lizenzfreie Platzhalter (Unsplash). Vor dem Livegang durch echte Fotos vom Centrale ersetzen. -->
 </head>
 <body class="is-loading">
 
-  <!-- ============ LOADER ============ -->
+  <!-- Loader -->
   <div class="loader" aria-hidden="true">
-    <div class="loader__inner">
-      <div class="loader__brand"><span>C</span><span>e</span><span>n</span><span>t</span><span>r</span><span>a</span><span>l</span><span>e</span></div>
-      <div class="loader__meta"><span>Tübingen</span><span class="loader__count">000</span></div>
-      <div class="loader__bar"><i></i></div>
-    </div>
-    <div class="loader__curtain"></div>
+    <div class="loader__word"><span>C</span><span>e</span><span>n</span><span>t</span><span>r</span><span>a</span><span>l</span><span>e</span></div>
+    <p class="loader__line"><span>Doblerstraße 10</span><span class="loader__count">0</span></p>
   </div>
 
-  <!-- ============ CURSOR ============ -->
-  <div class="cursor is-hidden" aria-hidden="true"><div class="cursor__dot"></div><div class="cursor__ring"><span class="cursor__label"></span></div></div>
-  <div class="grain" aria-hidden="true"></div>
+  <div class="paper" aria-hidden="true"></div>
 
-  <!-- ============ NAV ============ -->
+  <!-- Navigation -->
   <header class="nav">
-    <a href="#top" class="nav__logo" data-magnetic>Centrale<sup>TÜ</sup></a>
+    <a href="#top" class="nav__logo">Centrale</a>
     <nav class="nav__links" aria-label="Hauptnavigation">
-      <a href="#story">Geschichte</a>
+      <a href="#story">Über uns</a>
       <a href="#tag">Der Tag</a>
       <a href="#karte">Karte</a>
       <a href="#terrasse">Terrasse</a>
-      <a href="#kontakt">Kontakt</a>
+      <a href="#kontakt">Anfahrt</a>
     </nav>
-    <a href="tel:+49707122227" class="btn btn--pill nav__cta" data-magnetic><span>Reservieren</span></a>
+    <a href="tel:+49707122227" class="nav__phone"><i class="status-dot" data-open-dot></i>07071 22227</a>
     <button class="nav__burger" aria-label="Menü öffnen" aria-expanded="false"><i></i><i></i></button>
   </header>
   <div class="menu-overlay" aria-hidden="true">
-    <a href="#story">Geschichte</a><a href="#tag">Der Tag</a><a href="#karte">Karte</a><a href="#terrasse">Terrasse</a><a href="#kontakt">Kontakt</a>
-    <p>Doblerstraße 10 · 72074 Tübingen<br><a href="tel:+49707122227">07071 / 22 22 7</a></p>
+    <a href="#story">Über uns</a><a href="#tag">Der Tag</a><a href="#karte">Karte</a><a href="#terrasse">Terrasse</a><a href="#kontakt">Anfahrt</a>
+    <p>Doblerstraße 10, Tübingen<br><a href="tel:+49707122227">07071 22227</a></p>
   </div>
 
   <main id="top">
 
-    <!-- ============ HERO ============ -->
+    <!-- Hero -->
     <section class="hero">
-      <div class="hero__media" data-cursor="Centrale">
-        <img src="oven.jpg" alt="Pizza vor dem glühenden Steinofen" class="hero__img" />
-        <div class="hero__shade"></div>
+      <div class="hero__meta">
+        <span>Caffè · Bar · Pizza aus dem Steinofen</span>
+        <span class="hero__status" data-open-text>Doblerstraße 10, Tübingen</span>
       </div>
-      <div class="hero__top">
-        <p class="eyebrow hero__eyebrow"><span>Caffè</span><span>·</span><span>Bar</span><span>·</span><span>Ristorante</span></p>
-        <p class="eyebrow hero__eyebrow hero__eyebrow--r">Tübingen · Doblerstraße 10</p>
-      </div>
-      <h1 class="hero__title" aria-label="Centrale">
-        <span class="line"><span class="word" data-split>Centrale</span></span>
-      </h1>
-      <div class="hero__bottom">
-        <p class="hero__lead reveal-up">Vom Geheimtipp zum Insider-Tipp.<br><em>Das etwas andere Lokal</em> der Tübinger Innenstadt – gleich unterhalb vom Amtsgericht.</p>
-        <a href="#story" class="hero__scroll" data-magnetic aria-label="Weiter scrollen">
-          <svg viewBox="0 0 120 120" class="hero__scroll-ring"><defs><path id="circ" d="M60,60 m-46,0 a46,46 0 1,1 92,0 a46,46 0 1,1 -92,0"/></defs><text><textPath href="#circ">Scrollen · Entdecken · Genießen · </textPath></text></svg>
-          <span class="hero__scroll-arrow">↓</span>
-        </a>
+      <h1 class="hero__title" aria-label="Centrale"><span data-split>Centrale</span></h1>
+      <div class="hero__body">
+        <div class="hero__text">
+          <p class="hero__lead">Etwas versteckt, gleich unterhalb vom Amtsgericht. Morgens Kaffee, mittags Mittagstisch, abends Pizza aus dem Steinofen und ein Glas Wein. Und das seit fast 30 Jahren.</p>
+          <a href="#story" class="hero__down">Weiterlesen
+            <svg class="scribble" viewBox="0 0 60 80" aria-hidden="true"><path d="M30 4c-3 18 4 34 -1 52M16 46c5 8 9 14 13 20 4-7 9-13 15-19" /></svg>
+          </a>
+        </div>
+        <figure class="hero__media">
+          <div class="hero__img-wrap"><img src="oven.jpg" alt="Pizza vor dem glühenden Steinofen" class="hero__img" /></div>
+          <figure class="polaroid hero__polaroid">
+            <img src="espresso2.jpg" alt="Zwei Cappuccini und ein Eiskaffee" />
+            <figcaption>erstmal einen Cappuccino</figcaption>
+          </figure>
+        </figure>
       </div>
     </section>
 
-    <!-- ============ MARQUEE ============ -->
+    <!-- Marquee -->
     <div class="marquee" aria-hidden="true">
       <div class="marquee__track">
-        <span>Steinofenpizza</span><i>✦</i><span><em>Pasta fresca</em></span><i>✦</i><span>Mittagstisch</span><i>✦</i><span><em>Primitivo</em></span><i>✦</i><span>Cappuccino</span><i>✦</i><span><em>Terrazza</em></span><i>✦</i><span>Antipasti</span><i>✦</i><span><em>Aperitivo</em></span><i>✦</i>
-        <span>Steinofenpizza</span><i>✦</i><span><em>Pasta fresca</em></span><i>✦</i><span>Mittagstisch</span><i>✦</i><span><em>Primitivo</em></span><i>✦</i><span>Cappuccino</span><i>✦</i><span><em>Terrazza</em></span><i>✦</i><span>Antipasti</span><i>✦</i><span><em>Aperitivo</em></span><i>✦</i>
+        <span>Pizza aus dem Steinofen</span><b>·</b><span><em>Pasta</em></span><b>·</b><span>Mittagstisch</span><b>·</b><span><em>ein Glas Primitivo</em></span><b>·</b><span>Cappuccino to go</span><b>·</b><span><em>Terrasse mit Brunnen</em></span><b>·</b>
+        <span>Pizza aus dem Steinofen</span><b>·</b><span><em>Pasta</em></span><b>·</b><span>Mittagstisch</span><b>·</b><span><em>ein Glas Primitivo</em></span><b>·</b><span>Cappuccino to go</span><b>·</b><span><em>Terrasse mit Brunnen</em></span><b>·</b>
       </div>
     </div>
 
-    <!-- ============ STORY ============ -->
+    <!-- Geschichte -->
     <section class="story" id="story">
-      <div class="story__head">
-        <p class="eyebrow"><span class="num">01</span> Die Geschichte</p>
-        <h2 class="display" data-split-lines>Eine alte Bäckerstube.<br><em>Ein neues Zuhause</em><br>für die Stadt.</h2>
-      </div>
+      <p class="label">Über uns</p>
+      <h2 class="h2 story__title" data-lines>Früher wurde hier<br>Brot gebacken.</h2>
       <div class="story__grid">
-        <figure class="story__img story__img--a" data-cursor="Flair">
-          <div class="parallax"><img src="interior3.jpg" alt="Hohe Decken, warmes Licht, Holz – Restaurantinnenraum" loading="lazy" /></div>
+        <figure class="story__img story__img--a">
+          <div class="frame"><div class="parallax"><img src="interior3.jpg" alt="Gastraum mit hohen Decken und Holzstühlen" loading="lazy" /></div></div>
         </figure>
         <div class="story__text">
-          <p class="big-text" data-word-reveal>Seit fast drei Jahrzehnten lebt das Centrale in den Räumen einer ehemaligen Bäckerstube – hohe Decken, original mediterranes Flair, ein echtes Stammlokal. Die Lage ist etwas versteckt. Genau das macht den Reiz aus.</p>
-          <!-- Quelle: tuebingen-info.de ("Seit bald 30 Jahren ... ehemaligen Bäckerstube"). Genaues Gründungsjahr nicht gefunden – bitte vom Betreiber bestätigen lassen. -->
-          <p class="body">Von morgens bis spät abends trifft sich hier eine Mischung wirklich cooler Menschen – jüngere wie ältere. Man kennt sich, oder man lernt sich kennen: bei einer Steinofenpizza à la Centrale, einem Glas Primitivo oder einem Cappuccino an der Bar.</p>
-          <a href="#karte" class="link-arrow" data-magnetic><span>Zur Karte</span><i>→</i></a>
+          <p class="big-text" data-words>Das Centrale sitzt in einer ehemaligen Bäckerstube in der Doblerstraße. Hohe Decken, mediterranes Flair und seit fast 30 Jahren ziemlich viele Stammgäste.</p>
+          <!-- Quelle: tuebingen-info.de ("Seit bald 30 Jahren ... ehemaligen Bäckerstube"). Gründungsjahr beim Betreiber bestätigen. -->
+          <p class="body">Wer zum ersten Mal kommt, sucht meistens kurz. Von morgens bis spät sitzen hier Junge und Alte nebeneinander. Man kennt sich, oder man lernt sich kennen, bei einer Pizza à la Centrale, einem Primitivo oder einem Cappuccino.</p>
+          <a href="#karte" class="text-link">Was es zu essen gibt <span>→</span></a>
         </div>
-        <figure class="story__img story__img--b" data-cursor="Espresso">
-          <div class="parallax"><img src="espresso2.jpg" alt="Cappuccino und Espresso auf dem Tisch" loading="lazy" /></div>
+        <figure class="polaroid story__img--b">
+          <img src="espresso1.jpg" alt="Espresso in einer weißen Tasse" loading="lazy" />
+          <figcaption>Espresso, auch zum Mitnehmen</figcaption>
         </figure>
       </div>
-      <ul class="stats">
-        <li><strong data-count="30" data-prefix="~">~30</strong><span>Jahre Stammlokal</span></li>
-        <li><strong>10<small>–</small>02</strong><span>Uhr – vom Kaffee bis zum Absacker</span></li>
-        <li><strong>IV<small>–</small>X</strong><span>Terrassensaison April bis Oktober</span></li>
-        <li><strong data-count="1">1</strong><span>Steinofen. Das Herz der Küche.</span></li>
+      <ul class="facts">
+        <li><b>fast 30</b> Jahre in der Doblerstraße</li>
+        <li><b>1</b> Steinofen</li>
+        <li><b>April bis Oktober</b> Terrasse</li>
+        <li><b>bis 2 Uhr</b> freitags und samstags</li>
       </ul>
     </section>
 
-    <!-- ============ HORIZONTAL: EIN TAG ============ -->
+    <!-- Ein Tag im Centrale (horizontal) -->
     <section class="day" id="tag">
       <div class="day__intro">
-        <p class="eyebrow"><span class="num">02</span> Ein Tag im Centrale</p>
-        <h2 class="display">Von <em>zehn</em> bis<br>nach Mitternacht.</h2>
+        <p class="label">Ein Tag im Centrale</p>
+        <h2 class="h2">Morgens Espresso,<br>nachts noch ein Absacker.</h2>
       </div>
       <div class="day__pin">
         <div class="day__track">
-          <article class="day__card">
-            <div class="day__img"><img src="espresso1.jpg" alt="Kaffee am Morgen" loading="lazy" /></div>
-            <div class="day__meta"><span class="day__time">10:00</span><h3>Caffè</h3><p>Kaffee in allen Variationen – auch zum Mitnehmen, für die, die es eilig haben.</p></div>
+          <article class="day__card" style="--r:-2deg">
+            <div class="day__img"><img src="espresso2.jpg" alt="Cappuccino am Vormittag" loading="lazy" /></div>
+            <p class="day__time">10:00</p><h3>Kaffee</h3>
+            <p>Espresso, Cappuccino, was ihr wollt. Auch zum Mitnehmen, wenn's schnell gehen muss.</p>
           </article>
-          <article class="day__card">
-            <div class="day__img"><img src="pasta2.jpg" alt="Frischer Pastateller mittags" loading="lazy" /></div>
-            <div class="day__meta"><span class="day__time">12:00</span><h3>Mittagstisch</h3><p>Ein ausgewogener, abwechslungsreicher Mittagstisch – jede Woche neu.</p></div>
+          <article class="day__card day__card--low" style="--r:1.5deg">
+            <div class="day__img"><img src="pasta2.jpg" alt="Pastateller zum Mittagessen" loading="lazy" /></div>
+            <p class="day__time">12:00</p><h3>Mittagstisch</h3>
+            <p>Jeden Tag was anderes. Was es gibt, steht auf der Wochenkarte.</p>
           </article>
-          <article class="day__card">
-            <div class="day__img"><img src="street-cafe.jpg" alt="Café-Terrasse in einer Altstadtgasse" loading="lazy" /></div>
-            <div class="day__meta"><span class="day__time">16:00</span><h3>Terrazza</h3><p>Urige Holztische, Bänke, ein plätschernder Brunnen – und eine kühle Weinschorle.</p></div>
+          <article class="day__card day__card--wide" style="--r:-1deg">
+            <div class="day__img"><img src="street-cafe.jpg" alt="Tische draußen in einer Altstadtgasse" loading="lazy" /></div>
+            <p class="day__time">16:00</p><h3>Draußen sitzen</h3>
+            <p>Holztische, Bänke, der Brunnen plätschert. Dazu eine kalte Weinschorle.</p>
           </article>
-          <article class="day__card">
-            <div class="day__img"><img src="pizza1.jpg" alt="Steinofenpizza in Stücken" loading="lazy" /></div>
-            <div class="day__meta"><span class="day__time">19:00</span><h3>Steinofen</h3><p>Abends die Pizzen – frisch aus dem Steinofen, belegt ganz nach Ihrem Geschmack.</p></div>
+          <article class="day__card day__card--low" style="--r:2deg">
+            <div class="day__img"><img src="pizza1.jpg" alt="Pizza aus dem Steinofen, in Stücke geschnitten" loading="lazy" /></div>
+            <p class="day__time">19:00</p><h3>Steinofen</h3>
+            <p>Abends kommen die Pizzen aus dem Ofen. Ihr wollt was anderes drauf? Sagt einfach Bescheid.</p>
           </article>
-          <article class="day__card">
-            <div class="day__img"><img src="bar-night.jpg" alt="Beleuchtete Bar bei Nacht" loading="lazy" /></div>
-            <div class="day__meta"><span class="day__time">23:00</span><h3>Bar</h3><p>Lebhaft an der Bar – freitags und samstags bis zwei Uhr nachts.</p></div>
+          <article class="day__card" style="--r:-1.5deg">
+            <div class="day__img"><img src="bar-night.jpg" alt="Die Bar spät am Abend" loading="lazy" /></div>
+            <p class="day__time">23:00</p><h3>An der Bar</h3>
+            <p>Unter der Woche bis eins, freitags und samstags bis zwei.</p>
           </article>
-          <div class="day__end"><p>Und morgen<br><em>wieder.</em></p></div>
+          <div class="day__end"><p>Sonntags ist zu.<br><span>Da schlafen wir aus.</span></p></div>
         </div>
       </div>
-      <div class="day__progress"><i></i></div>
     </section>
 
-    <!-- ============ MENU ============ -->
+    <!-- Karte -->
     <section class="menu" id="karte">
       <div class="menu__head">
-        <p class="eyebrow"><span class="num">03</span> Aus der Karte</p>
-        <h2 class="display" data-split-lines>Mediterran.<br><em>Ehrlich.</em> Frisch.</h2>
-        <p class="body menu__note">Ein Auszug unserer Lieblinge. Die Nudelgerichte werden nur mit frischen Zutaten zubereitet, die Pizzen kommen aus dem Steinofen – und auf Wunsch belegen wir sie ganz nach Ihrem Geschmack.</p>
+        <p class="label">Aus der Karte</p>
+        <h2 class="h2" data-lines>Was bei uns<br>auf den Tisch kommt.</h2>
+        <p class="body menu__note">Ein Auszug. Die Pasta machen wir mit frischen Zutaten, die Pizza kommt aus dem Steinofen. Die ganze Karte und den Mittagstisch der Woche gibt's bei uns vor Ort.</p>
       </div>
-      <!-- Gerichte: lt. speisekarte.de (Stand 12.10.2024). Preise bewusst weggelassen – aktuelle Karte & Preise vom Betreiber einholen. -->
-      <ol class="menu__list">
-        <li class="menu__item" data-img="antipasti.jpg">
-          <span class="menu__idx">01</span>
-          <div class="menu__name"><h3>Antipasto Centrale</h3><p>Variation aus verschiedenen italienischen Vorspeisen – für eine oder zwei Personen</p></div>
-          <span class="menu__cat">Antipasti</span>
-        </li>
-        <li class="menu__item" data-img="interior2.jpg">
-          <span class="menu__idx">02</span>
-          <div class="menu__name"><h3>Carpaccio vom Bresaola</h3><p>mit Burrata und Avocado</p></div>
-          <span class="menu__cat">Antipasti</span>
-        </li>
-        <li class="menu__item" data-img="fresh-pasta.jpg">
-          <span class="menu__idx">03</span>
-          <div class="menu__name"><h3>Tagliatelle al salmone e avocado</h3><p>Lachsfilet · Avocado · Cherrytomaten · Soja · Butter</p></div>
-          <span class="menu__cat">Pasta</span>
-        </li>
-        <li class="menu__item" data-img="pasta-seafood.jpg">
-          <span class="menu__idx">04</span>
-          <div class="menu__name"><h3>Spaghetti Frutti di Mare</h3><p>Meeresfrüchte · Kirschtomaten · Weißwein</p></div>
-          <span class="menu__cat">Pasta</span>
-        </li>
-        <li class="menu__item" data-img="pasta1.jpg">
-          <span class="menu__idx">05</span>
-          <div class="menu__name"><h3>Gnocchi freschi gorgonzola e salvia</h3><p>Frische Gnocchi in Gorgonzolasauce mit Salbei</p></div>
-          <span class="menu__cat">Pasta</span>
-        </li>
-        <li class="menu__item" data-img="pizza3.jpg">
-          <span class="menu__idx">06</span>
-          <div class="menu__name"><h3>Steinofenpizza Crudaiola</h3><p>Tomate · Käse · Parmaschinken · Mozzarella · Parmesan · Rucola</p></div>
-          <span class="menu__cat">Pizza</span>
-        </li>
-        <li class="menu__item" data-img="pizza2.jpg">
-          <span class="menu__idx">07</span>
-          <div class="menu__name"><h3>Steinofenpizza Calabrese</h3><p>Tomate · Käse · Auberginen · Chili · Sardellen · Oliven · Kapern</p></div>
-          <span class="menu__cat">Pizza</span>
-        </li>
-        <li class="menu__item" data-img="tiramisu.jpg">
-          <span class="menu__idx">08</span>
-          <div class="menu__name"><h3>Tiramisu</h3><p>Löffelbiskuit, geschichtet mit Kaffee und Mascarponecreme</p></div>
-          <span class="menu__cat">Dolce</span>
-        </li>
-      </ol>
-      <div class="menu__reveal" aria-hidden="true"><div class="menu__reveal-inner"><img src="antipasti.jpg" alt="" /></div></div>
+      <!-- Gerichte lt. speisekarte.de (Stand 12.10.2024). Preise bewusst weggelassen, aktuelle Karte vom Betreiber holen. -->
+      <div class="menu__card">
+        <p class="menu__card-title">Speisekarte <span>Auszug</span></p>
+        <div class="menu__cols">
+          <div class="menu__group">
+            <h3 class="menu__cat">Antipasti</h3>
+            <ul class="menu__list">
+              <li class="menu__item" data-img="antipasti.jpg"><h4>Antipasto Centrale</h4><p>gemischte italienische Vorspeisen, für eine oder zwei Personen</p></li>
+              <li class="menu__item" data-img="interior2.jpg"><h4>Carpaccio vom Bresaola</h4><p>mit Burrata und Avocado</p></li>
+            </ul>
+            <h3 class="menu__cat">Pasta</h3>
+            <ul class="menu__list">
+              <li class="menu__item" data-img="fresh-pasta.jpg"><h4>Tagliatelle al salmone e avocado</h4><p>Lachsfilet, Avocado, Cherrytomaten, Soja, Butter</p></li>
+              <li class="menu__item" data-img="pasta-seafood.jpg"><h4>Spaghetti Frutti di Mare</h4><p>Meeresfrüchte, Kirschtomaten, Weißwein</p></li>
+              <li class="menu__item" data-img="pasta1.jpg"><h4>Gnocchi freschi gorgonzola e salvia</h4><p>frische Gnocchi in Gorgonzolasauce</p></li>
+            </ul>
+          </div>
+          <div class="menu__group">
+            <h3 class="menu__cat">Pizza aus dem Steinofen</h3>
+            <ul class="menu__list">
+              <li class="menu__item" data-img="pizza3.jpg"><h4>Crudaiola</h4><p>Tomate, Käse, Parmaschinken, Mozzarella, Parmesan, Rucola</p></li>
+              <li class="menu__item" data-img="pizza2.jpg"><h4>Calabrese</h4><p>Tomate, Käse, Auberginen, Chili, Sardellen, Oliven, Kapern</p></li>
+            </ul>
+            <p class="hand menu__hand">anderer Belag? klar, sagt Bescheid
+              <svg class="scribble scribble--arrow" viewBox="0 0 120 50" aria-hidden="true"><path d="M112 8C86 6 52 10 30 30M30 30l3-14M30 30l14 1" /></svg>
+            </p>
+            <h3 class="menu__cat">Dolci</h3>
+            <ul class="menu__list">
+              <li class="menu__item" data-img="tiramisu.jpg"><h4>Tiramisu</h4><p>Löffelbiskuit, Kaffee, Mascarponecreme</p></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="menu__reveal" aria-hidden="true"><img src="antipasti.jpg" alt="" /></div>
     </section>
 
-    <!-- ============ TERRASSE ============ -->
+    <!-- Terrasse -->
     <section class="terrace" id="terrasse">
-      <div class="terrace__media" data-cursor="Terrazza">
-        <img src="terrace-green.jpg" alt="Begrünte Terrasse mit Tischen im Freien" loading="lazy" />
-      </div>
-      <div class="terrace__content">
-        <p class="eyebrow eyebrow--light"><span class="num">04</span> La Terrazza · April bis Oktober</p>
-        <blockquote class="terrace__quote" data-split-lines>Wie die Kulisse<br>einer <em>schnulzigen</em><br><em>Filmproduktion.</em></blockquote>
-        <p class="terrace__text">Urige Holztische, Bänke und ein plätschernder Brunnen. Eine kühle Weinschorle im Glas und den Tübinger Sommer im Herzen – ab Mittag und besonders abends lockt die Terrasse zum Verweilen.</p>
+      <div class="terrace__media"><img src="terrace-green.jpg" alt="Terrasse mit Pflanzen und Tischen im Freien" loading="lazy" /></div>
+      <div class="terrace__card">
+        <p class="label">Terrasse, April bis Oktober</p>
+        <h2 class="terrace__quote" data-lines>Sieht ein bisschen<br>aus wie im Film.</h2>
+        <p class="body">Holztische, Bänke und ein Brunnen, der die ganze Zeit plätschert. Ab mittags ist draußen offen, und an warmen Abenden bleibt man meistens länger als geplant.</p>
       </div>
     </section>
 
-    <!-- ============ GALLERY ============ -->
+    <!-- Ambiente -->
     <section class="gallery" aria-label="Ambiente">
       <div class="gallery__head">
-        <p class="eyebrow"><span class="num">05</span> Ambiente</p>
-        <h2 class="display">Gemütlich.<br><em>Mit sehr viel Flair.</em></h2>
+        <p class="label">Ambiente</p>
+        <h2 class="h2">Gemütlich,<br>manchmal ziemlich laut.</h2>
       </div>
-      <div class="gallery__cols">
-        <div class="gallery__col" data-speed="-12">
-          <figure data-cursor="Ansehen"><img src="friends.jpg" alt="Freunde teilen Gerichte am Tisch" loading="lazy" /></figure>
-          <figure data-cursor="Ansehen"><img src="wine.jpg" alt="Anstoßen mit Rotwein" loading="lazy" /></figure>
-        </div>
-        <div class="gallery__col" data-speed="10">
-          <figure data-cursor="Ansehen"><img src="guest.jpg" alt="Gast genießt den Abend" loading="lazy" /></figure>
-          <figure data-cursor="Ansehen"><img src="night.jpg" alt="Die Bar am Abend" loading="lazy" /></figure>
-        </div>
-        <div class="gallery__col" data-speed="-20">
-          <figure data-cursor="Ansehen"><img src="bar.jpg" alt="Drink wird eingeschenkt" loading="lazy" /></figure>
-          <figure data-cursor="Ansehen"><img src="interior1.jpg" alt="Restaurant am Abend" loading="lazy" /></figure>
-        </div>
+      <div class="gallery__grid">
+        <figure class="g g1" data-speed="-6"><img src="friends.jpg" alt="Freunde teilen Essen am Tisch" loading="lazy" /></figure>
+        <figure class="g g2 polaroid" data-speed="8" style="--r:3deg"><img src="wine.jpg" alt="Anstoßen mit Rotwein" loading="lazy" /><figcaption>Primitivo, wer sonst</figcaption></figure>
+        <figure class="g g3" data-speed="-12"><img src="guest.jpg" alt="Gast beim Abendessen" loading="lazy" /></figure>
+        <figure class="g g4" data-speed="4"><img src="night.jpg" alt="Bar am Abend" loading="lazy" /></figure>
+        <figure class="g g5 polaroid" data-speed="-4" style="--r:-2.5deg"><img src="bar.jpg" alt="Drink wird eingeschenkt" loading="lazy" /><figcaption>kurz vor zwölf</figcaption></figure>
+        <figure class="g g6" data-speed="10"><img src="interior1.jpg" alt="Restaurant am Abend" loading="lazy" /></figure>
       </div>
     </section>
 
-    <!-- ============ VOICES ============ -->
+    <!-- Gäste -->
     <section class="voices">
-      <p class="eyebrow"><span class="num">06</span> Was Gäste sagen</p>
-      <!-- Zitate: öffentliche Google-Bewertungen, gefunden via coolibri.de / localitybiz.de. Vor Veröffentlichung Nutzungsrechte prüfen bzw. durch eigene Gästestimmen ersetzen. -->
+      <p class="label">Was Gäste schreiben</p>
+      <!-- Zitate: öffentliche Google-Bewertungen (via coolibri.de / localitybiz.de). Nutzungsrechte prüfen oder durch eigene Gästestimmen ersetzen. -->
       <div class="voices__slider">
-        <figure class="voice is-active"><blockquote>„Außergewöhnlich gute Pizzen kann man hier essen. Sehr zu empfehlen.“</blockquote><figcaption>Google-Bewertung</figcaption></figure>
-        <figure class="voice"><blockquote>„Die Pizza wird frisch im Steinofen gemacht. Deshalb konnte der Belag variiert werden. Richtig gut.“</blockquote><figcaption>Google-Bewertung</figcaption></figure>
-        <figure class="voice"><blockquote>„Nettes Lokal, etwas abseits, man hat somit seine Ruhe. Draußen zu sitzen fand ich wundervoll.“</blockquote><figcaption>Google-Bewertung</figcaption></figure>
+        <figure class="voice is-active"><blockquote>„Außergewöhnlich gute Pizzen kann man hier essen. Sehr zu empfehlen.“</blockquote><figcaption>Google-Rezension, Januar 2025</figcaption></figure>
+        <figure class="voice"><blockquote>„Die Pizza wird frisch im Steinofen gemacht. Deshalb konnte der Belag variiert werden. Richtig gut.“</blockquote><figcaption>Google-Rezension</figcaption></figure>
+        <figure class="voice"><blockquote>„Nettes Lokal, etwas abseits, man hat somit seine Ruhe. Draußen zu sitzen fand ich wundervoll.“</blockquote><figcaption>Google-Rezension</figcaption></figure>
       </div>
-      <div class="voices__dots"><button aria-label="Stimme 1" class="is-active"></button><button aria-label="Stimme 2"></button><button aria-label="Stimme 3"></button></div>
+      <div class="voices__nav"><span class="voices__count">1 von 3</span><button class="voices__next" aria-label="Nächste Rezension">nächste →</button></div>
     </section>
 
-    <!-- ============ EVENTS / CATERING ============ -->
+    <!-- Catering & Feiern -->
     <section class="events">
-      <div class="events__card" data-cursor="Catering">
-        <div class="events__img parallax-wrap"><div class="parallax"><img src="antipasti.jpg" alt="Antipasti-Platte für ein Buffet" loading="lazy" /></div></div>
+      <div class="events__card">
+        <div class="events__img"><div class="parallax"><img src="antipasti.jpg" alt="Antipasti-Platte" loading="lazy" /></div></div>
         <div class="events__body">
-          <p class="eyebrow"><span class="num">07</span> Catering & Feiern</p>
-          <h3>Ihr Fest. <em>Unser Buffet.</em></h3>
-          <p class="body">Ob im kleinen Kreis oder als große Festlichkeit: Wir arrangieren Ihr Buffet in unseren Räumlichkeiten oder liefern es zu Ihnen nach Hause – von Antipasti und Flying Dinner bis zu Saltimbocca, Ochsenbäckchen und Panna Cotta. Sie bezahlen nur, was Sie sich wirklich wünschen.</p>
-          <a href="https://www.centrale-tuebingen.de/catering-anfrage/" class="btn btn--line" data-magnetic target="_blank" rel="noopener"><span>Catering anfragen</span></a>
+          <p class="label">Catering</p>
+          <h3>Ihr feiert,<br>wir machen das Buffet.</h3>
+          <p class="body">Bei uns im Lokal oder geliefert zu euch nach Hause. Antipasti, Lasagne, Saltimbocca, Ochsenbäckchen, Panna Cotta: Ihr sucht aus, was ihr wollt, und zahlt auch nur das.</p>
+          <a href="https://www.centrale-tuebingen.de/catering-anfrage/" class="btn" target="_blank" rel="noopener">Catering anfragen</a>
         </div>
       </div>
-      <div class="events__card events__card--alt" data-cursor="Feiern">
+      <div class="events__card events__card--alt">
         <div class="events__body">
-          <!-- Nikolausfeier: auf der offiziellen Website zuletzt für 2019 angekündigt – aktuellen Stand beim Betreiber erfragen. -->
-          <p class="eyebrow">Tradition</p>
-          <h3>Die Centrale-Feier <em>am Nikolaustag.</em></h3>
-          <p class="body">Anspruchsvoll ausgelassen: Musik, Zelt und Special Offers – lange vor Silvester eine absolute Knaller-Party.</p>
+          <!-- Nikolausfeier: auf der offiziellen Website zuletzt für 2019 angekündigt. Aktuellen Stand beim Betreiber erfragen. -->
+          <p class="label">Jedes Jahr im Dezember</p>
+          <h3>Am Nikolaustag wird gefeiert.</h3>
+          <p class="body">Die Centrale-Feier: Musik, Zelt, ein paar Specials an der Bar. Lange vor Silvester und meistens die bessere Party.</p>
         </div>
-        <div class="events__img parallax-wrap"><div class="parallax"><img src="wine.jpg" alt="Anstoßen bei einer Feier" loading="lazy" /></div></div>
+        <figure class="polaroid events__polaroid" style="--r:2deg"><img src="interior2.jpg" alt="Gedeckter Tisch mit Kerzenlicht" loading="lazy" /><figcaption>6. Dezember</figcaption></figure>
       </div>
     </section>
 
-    <!-- ============ RESERVATION CTA ============ -->
+    <!-- Reservieren -->
     <section class="reserve" id="reservieren">
-      <p class="eyebrow eyebrow--light">Reservierung</p>
-      <h2 class="reserve__title"><span class="line"><span>Ein Tisch</span></span><span class="line"><span><em>für heute Abend?</em></span></span></h2>
-      <p class="reserve__text">Das Centrale ist oft gut besucht – wir empfehlen zu reservieren. Rufen Sie uns einfach an.</p>
-      <a href="tel:+49707122227" class="reserve__btn" data-magnetic data-cursor-hide>
-        <span class="reserve__btn-bg"></span>
-        <span class="reserve__btn-label">07071 / 22 22 7</span>
-      </a>
-      <!-- Kein Online-Reservierungssystem gefunden. Falls gewünscht, hier z. B. OpenTable/Resmio-Widget einbinden. -->
+      <p class="label">Reservieren</p>
+      <h2 class="reserve__title">Abends wird's voll.<br>Ruft lieber vorher an.</h2>
+      <a href="tel:+49707122227" class="reserve__phone">07071 22227</a>
+      <p class="reserve__note">Kartenzahlung nur mit EC-Karte, keine Kreditkarten.</p>
+      <!-- EC-Karte: laut Google-Rezensionen ("nur Bankkarten, keine Kreditkarten"). Vor Livegang bestätigen. Kein Online-Reservierungssystem gefunden. -->
     </section>
 
-    <!-- ============ CONTACT ============ -->
+    <!-- Kontakt -->
     <section class="contact" id="kontakt">
-      <div class="contact__col">
-        <p class="eyebrow"><span class="num">08</span> Adresse</p>
-        <p class="contact__big">Doblerstraße 10<br>72074 Tübingen</p>
-        <p class="body">Etwas versteckt in der Innenstadt,<br>gleich unterhalb vom Amtsgericht.</p>
-        <a class="link-arrow" href="https://www.google.com/maps/search/?api=1&query=Caff%C3%A8-Bar+Centrale+Doblerstra%C3%9Fe+10+72074+T%C3%BCbingen" target="_blank" rel="noopener" data-magnetic><span>Route planen</span><i>↗</i></a>
+      <div class="contact__where">
+        <p class="label">So findet ihr uns</p>
+        <p class="contact__addr">Doblerstraße 10<br>72074 Tübingen</p>
+        <p class="body">Die Doblerstraße runter, unterhalb vom Amtsgericht. Etwas versteckt, aber das gehört dazu.</p>
+        <a class="text-link" href="https://www.google.com/maps/search/?api=1&query=Caff%C3%A8-Bar+Centrale+Doblerstra%C3%9Fe+10+72074+T%C3%BCbingen" target="_blank" rel="noopener">In Google Maps öffnen <span>↗</span></a>
       </div>
-      <div class="contact__col">
-        <p class="eyebrow">Öffnungszeiten</p>
-        <!-- Quelle: centrale-tuebingen.de. Andere Portale nennen abweichende Zeiten (z. B. Mittagspause) – vor Livegang bestätigen. -->
-        <dl class="hours">
-          <div><dt>Montag – Donnerstag</dt><dd>10:00 – 01:00</dd></div>
-          <div><dt>Freitag</dt><dd>10:00 – 02:00</dd></div>
-          <div><dt>Samstag</dt><dd>17:00 – 02:00</dd></div>
-          <div><dt>Sonn- &amp; Feiertage</dt><dd>geschlossen</dd></div>
+      <!-- Öffnungszeiten lt. centrale-tuebingen.de. Andere Portale nennen abweichende Zeiten, vor Livegang bestätigen. -->
+      <div class="sign" aria-label="Öffnungszeiten">
+        <svg class="sign__string" viewBox="0 0 200 50" aria-hidden="true"><path d="M3 50L100 5L197 50" /><circle cx="100" cy="5" r="3.5" /></svg>
+        <p class="sign__head">Geöffnet</p>
+        <dl class="sign__hours">
+          <div data-days="1,2,3,4"><dt>Mo – Do</dt><dd>10 – 1 Uhr</dd></div>
+          <div data-days="5"><dt>Freitag</dt><dd>10 – 2 Uhr</dd></div>
+          <div data-days="6"><dt>Samstag</dt><dd>17 – 2 Uhr</dd></div>
+          <div data-days="0"><dt>Sonntag</dt><dd>zu</dd></div>
         </dl>
-        <p class="body small">Mittagstisch ab 12 Uhr · Terrasse April bis Oktober</p>
+        <p class="sign__foot">Feiertags zu.<br>Mittagstisch ab 12 Uhr</p>
       </div>
-      <div class="contact__col">
-        <p class="eyebrow">Kontakt</p>
+      <div class="contact__call">
+        <p class="label">Anrufen</p>
+        <a href="tel:+49707122227" class="contact__phone">07071 22227</a>
         <ul class="contact__list">
-          <li><span>Telefon</span><a href="tel:+49707122227">07071 / 22 22 7</a></li>
-          <li><span>Telefax</span>07071 / 566 89 04</li>
-          <li><span>E-Mail</span><a href="mailto:kontakt@centrale-tue.de">kontakt@centrale-tue.de</a></li>
+          <li><span>Mail</span><a href="mailto:kontakt@centrale-tue.de">kontakt@centrale-tue.de</a></li>
+          <li><span>Fax</span>07071 5668904</li>
         </ul>
       </div>
     </section>
 
   </main>
 
-  <!-- ============ FOOTER ============ -->
   <footer class="footer">
-    <div class="footer__marquee" aria-hidden="true"><div class="footer__track"><span>Centrale</span><span><em>Centrale</em></span><span>Centrale</span><span><em>Centrale</em></span></div></div>
+    <div class="footer__marquee" aria-hidden="true"><div class="footer__track"><span>Centrale</span><span class="o">Centrale</span><span>Centrale</span><span class="o">Centrale</span></div></div>
     <div class="footer__row">
-      <p>© <span class="year">2026</span> Caffè-Bar Centrale · Tübingen</p>
-      <p class="footer__links"><a href="#">Impressum</a><a href="#">Datenschutz</a><!-- Impressum/Datenschutz: Links ergänzen --><a href="#top" data-magnetic>Nach oben ↑</a></p>
+      <p>Caffè-Bar Centrale · Doblerstraße 10 · Tübingen</p>
+      <p class="footer__links"><a href="#">Impressum</a><a href="#">Datenschutz</a><!-- Impressum/Datenschutz verlinken --><a href="#top">Nach oben ↑</a></p>
     </div>
   </footer>
 

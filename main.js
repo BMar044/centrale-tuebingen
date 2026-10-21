@@ -1,214 +1,192 @@
-/* Centrale – Motion */
+/* Centrale */
 (() => {
   const root = document.documentElement;
   const motion = root.classList.contains('motion');
-  const finePointer = matchMedia('(hover:hover) and (pointer:fine)').matches;
+  const fine = matchMedia('(hover:hover) and (pointer:fine)').matches;
   const $ = (s, c = document) => c.querySelector(s);
   const $$ = (s, c = document) => [...c.querySelectorAll(s)];
 
-  /* ---------- text splitting ---------- */
-  $$('[data-split]').forEach(el => {
-    el.innerHTML = [...el.textContent].map(ch => `<span class="char">${ch}</span>`).join('');
-  });
-  $$('[data-word-reveal]').forEach(el => {
-    el.innerHTML = el.textContent.trim().split(/\s+/).map(w => `<span class="w">${w}</span>`).join(' ');
-  });
-  $$('[data-split-lines]').forEach(el => {
-    // split on <br>, wrap each line for mask reveal
-    const parts = el.innerHTML.split(/<br\s*\/?>/i);
-    el.innerHTML = parts.map(p => `<span class="split-line"><span>${p.trim()}</span></span>`).join('');
-  });
+  /* ---------- open / closed (Europe/Berlin) ---------- */
+  // Minuten ab Mitternacht; >1440 = nach Mitternacht. So=0 … Sa=6. Feiertage nicht berücksichtigt.
+  const HOURS = { 0: null, 1: [600, 1500], 2: [600, 1500], 3: [600, 1500], 4: [600, 1500], 5: [600, 1560], 6: [1020, 1560] };
+  const DAYS = ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'];
+  const fmt = m => `${Math.floor((m % 1440) / 60)}${m % 60 ? ':' + String(m % 60).padStart(2, '0') : ''} Uhr`;
+  try {
+    const parts = new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/Berlin', weekday: 'short', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).formatToParts(new Date());
+    const wd = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].indexOf(parts.find(p => p.type === 'weekday').value);
+    const min = +parts.find(p => p.type === 'hour').value * 60 + +parts.find(p => p.type === 'minute').value;
+    let openDay = null, until = 0;
+    const today = HOURS[wd], prev = HOURS[(wd + 6) % 7];
+    if (prev && prev[1] > 1440 && min < prev[1] - 1440) { openDay = (wd + 6) % 7; until = prev[1]; }
+    else if (today && min >= today[0] && min < today[1]) { openDay = wd; until = today[1]; }
+    const statusEl = $('[data-open-text]');
+    if (openDay !== null) {
+      statusEl.textContent = `Jetzt offen, bis ${fmt(until)}`; statusEl.classList.add('is-open');
+      $$('[data-open-dot]').forEach(d => d.classList.add('is-open'));
+    } else {
+      let d = wd, first = true;
+      for (let i = 0; i < 8; i++) { const h = HOURS[d]; if (h && (!first || min < h[0])) { statusEl.textContent = `Gerade zu, ${i === 0 ? 'heute' : i === 1 ? 'morgen' : DAYS[d]} ab ${fmt(h[0])} wieder offen`; break; } d = (d + 1) % 7; first = false; }
+    }
+    const signDay = openDay !== null ? openDay : wd;
+    $$('.sign__hours [data-days]').forEach(r => { if (r.dataset.days.split(',').includes(String(signDay))) r.classList.add('is-today'); });
+  } catch (e) { /* Status bleibt neutral */ }
 
-  /* ---------- nav / mobile menu (always) ---------- */
+  /* ---------- splitting ---------- */
+  $$('[data-split]').forEach(el => { el.innerHTML = [...el.textContent].map(c => `<span class="char">${c}</span>`).join(''); });
+  $$('[data-words]').forEach(el => { el.innerHTML = el.textContent.trim().split(/\s+/).map(w => `<span class="w">${w}</span>`).join(' '); });
+  $$('[data-lines]').forEach(el => { el.innerHTML = el.innerHTML.split(/<br\s*\/?>/i).map(l => `<span class="line-mask"><span>${l.trim()}</span></span>`).join(''); });
+
+  /* ---------- mobile menu ---------- */
   const nav = $('.nav'), burger = $('.nav__burger'), overlay = $('.menu-overlay');
   burger.addEventListener('click', () => {
     const open = burger.getAttribute('aria-expanded') !== 'true';
-    burger.setAttribute('aria-expanded', open);
-    overlay.classList.toggle('is-open', open);
-    overlay.setAttribute('aria-hidden', !open);
+    burger.setAttribute('aria-expanded', open); overlay.classList.toggle('is-open', open); overlay.setAttribute('aria-hidden', !open);
   });
-  $$('a', overlay).forEach(a => a.addEventListener('click', () => { burger.click(); }));
+  $$('a', overlay).forEach(a => a.addEventListener('click', () => burger.click()));
 
-  /* ---------- voices slider (always) ---------- */
-  const voices = $$('.voice'), dots = $$('.voices__dots button');
+  /* ---------- voices ---------- */
+  const voices = $$('.voice'), count = $('.voices__count');
   let vi = 0, vt;
   const showVoice = i => {
-    const prev = voices[vi]; vi = i;
-    dots.forEach((d, k) => d.classList.toggle('is-active', k === i));
+    const prev = voices[vi]; vi = i; count.textContent = `${i + 1} von ${voices.length}`;
     if (motion && window.gsap) {
-      gsap.to(prev, { autoAlpha: 0, y: -20, duration: .6, ease: 'power2.in' });
-      gsap.fromTo(voices[i], { autoAlpha: 0, y: 30 }, { autoAlpha: 1, y: 0, duration: 1, delay: .5, ease: 'power3.out' });
-    } else { voices.forEach((v, k) => v.classList.toggle('is-active', k === i)); }
+      gsap.to(prev, { autoAlpha: 0, duration: .35, ease: 'power1.in' });
+      gsap.fromTo(voices[i], { autoAlpha: 0, x: 14 }, { autoAlpha: 1, x: 0, duration: .7, delay: .3, ease: 'power2.out' });
+    } else voices.forEach((v, k) => v.classList.toggle('is-active', k === i));
   };
-  const autoVoice = () => { clearInterval(vt); vt = setInterval(() => showVoice((vi + 1) % voices.length), 6000); };
-  dots.forEach((d, i) => d.addEventListener('click', () => { if (i !== vi) showVoice(i); autoVoice(); }));
-  autoVoice();
+  const auto = () => { clearInterval(vt); vt = setInterval(() => showVoice((vi + 1) % voices.length), 7000); };
+  $('.voices__next').addEventListener('click', () => { showVoice((vi + 1) % voices.length); auto(); });
+  auto();
 
   if (!motion || !window.gsap) { document.body.classList.remove('is-loading'); return; }
-
   gsap.registerPlugin(ScrollTrigger);
 
-  /* ---------- Lenis smooth scroll ---------- */
-  const lenis = new Lenis({ duration: 1.25, easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smoothWheel: true });
-  lenis.stop(); window.lenis = lenis;
+  /* ---------- Lenis ---------- */
+  const lenis = new Lenis({ lerp: .11, smoothWheel: true });
+  window.lenis = lenis; lenis.stop();
   lenis.on('scroll', ScrollTrigger.update);
-  gsap.ticker.add(t => lenis.raf(t * 1000));
-  gsap.ticker.lagSmoothing(0);
+  gsap.ticker.add(t => lenis.raf(t * 1000)); gsap.ticker.lagSmoothing(0);
   $$('a[href^="#"]').forEach(a => a.addEventListener('click', e => {
-    const id = a.getAttribute('href'); if (id.length < 2 && id !== '#top') return;
-    const target = id === '#top' ? 0 : $(id); if (target === null) return;
-    e.preventDefault(); lenis.scrollTo(target, { duration: 1.8 });
+    const id = a.getAttribute('href'); if (id === '#') return;
+    const t = id === '#top' ? 0 : $(id); if (t === null) return;
+    e.preventDefault(); lenis.scrollTo(t, { duration: 1.4, offset: id === '#top' ? 0 : -40 });
   }));
-
-  /* nav hide on scroll down */
   let lastY = 0;
   lenis.on('scroll', ({ scroll }) => {
-    nav.classList.toggle('is-scrolled', scroll > 60);
-    nav.classList.toggle('is-hidden', scroll > lastY && scroll > 400 && !overlay.classList.contains('is-open'));
+    nav.classList.toggle('is-scrolled', scroll > 40);
+    nav.classList.toggle('is-hidden', scroll > lastY + 2 && scroll > 500 && !overlay.classList.contains('is-open'));
+    if (scroll < lastY - 2) nav.classList.remove('is-hidden');
     lastY = scroll;
   });
 
-  /* ---------- loader + hero intro ---------- */
-  const counter = { v: 0 };
-  const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
-  tl.to('.loader__brand span', { y: 0, duration: 1.1, stagger: .06 })
-    .to(counter, { v: 100, duration: 2, ease: 'power2.inOut', onUpdate: () => { $('.loader__count').textContent = String(Math.round(counter.v)).padStart(3, '0'); } }, 0)
-    .to('.loader__bar i', { scaleX: 1, duration: 2, ease: 'power2.inOut' }, 0)
-    .to('.loader__brand span', { y: '-110%', duration: .8, stagger: .03, ease: 'expo.in' }, 2.1)
-    .to('.loader__meta, .loader__bar', { autoAlpha: 0, duration: .4 }, 2.2)
-    .to('.loader__curtain', { yPercent: -100, duration: 1.2, ease: 'expo.inOut' }, 2.7)
+  /* ---------- loader + intro ---------- */
+  const c = { v: 0 }, countEl = $('.loader__count');
+  const intro = gsap.timeline();
+  intro.to('.loader__word span', { y: 0, duration: .9, ease: 'power3.out', stagger: { each: .045, from: 'start' } })
+    .to(c, { v: 100, duration: 1.3, ease: 'power1.inOut', onUpdate: () => countEl.textContent = Math.round(c.v) }, 0)
+    .to('.loader', { yPercent: -100, duration: .9, ease: 'power4.inOut' }, 1.45)
     .set('.loader', { display: 'none' })
-    .to('.hero__media', { clipPath: 'inset(0% 0% 0% 0%)', duration: 1.8, ease: 'expo.inOut' }, 2.8)
-    .to('.hero__img', { scale: 1.08, duration: 2.4, ease: 'expo.out' }, 3.0)
-    .to('.hero__title .char', { y: 0, duration: 1.4, stagger: .05 }, 3.4)
-    .from('.hero__eyebrow', { y: 20, autoAlpha: 0, duration: 1, stagger: .1 }, 3.8)
-    .from('.hero__lead, .hero__scroll', { y: 30, autoAlpha: 0, duration: 1.2, stagger: .12 }, 4.0)
-    .from('.nav', { autoAlpha: 0, duration: 1.2, clearProps: 'opacity,visibility' }, 3.9)
-    .add(() => { document.body.classList.remove('is-loading'); lenis.start(); ScrollTrigger.refresh(); }, 3.6);
-  window.__skipIntro = () => tl.progress(1); // for screenshots/testing
+    .to('.hero__title .char', { y: 0, duration: 1.1, ease: 'power4.out', stagger: i => [0, .05, .09, .16, .2, .27, .3, .36][i] || i * .05 }, 1.75)
+    .from('.hero__img-wrap', { clipPath: 'inset(0 0 100% 0)', duration: 1.2, ease: 'power3.inOut' }, 1.85)
+    .from('.hero__img', { scale: 1.18, duration: 1.8, ease: 'power2.out' }, 1.85)
+    .from('.hero__polaroid', { y: 60, rotation: -14, autoAlpha: 0, duration: 1, ease: 'back.out(1.4)' }, 2.5)
+    .from('.hero__meta, .hero__lead', { autoAlpha: 0, y: 10, duration: .8, ease: 'power2.out', stagger: .1 }, 2.2)
+    .from('.hero__down', { autoAlpha: 0, duration: .6 }, 2.8)
+    .add(() => { document.body.classList.remove('is-loading'); lenis.start(); ScrollTrigger.refresh(); }, 2.2);
+  window.__skipIntro = () => intro.progress(1);
 
-  /* hero scroll parallax */
-  gsap.to('.hero__img', { yPercent: 18, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
-  gsap.to('.hero__title', { yPercent: -40, autoAlpha: .2, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
+  /* hand-drawn strokes */
+  const draw = (path, trigger, delay = 0) => {
+    const len = path.getTotalLength(); gsap.set(path, { strokeDasharray: len, strokeDashoffset: len });
+    const cfg = { strokeDashoffset: 0, duration: 1, ease: 'power1.inOut', delay };
+    if (trigger) cfg.scrollTrigger = { trigger, start: 'top 80%' };
+    return gsap.to(path, cfg);
+  };
+  intro.add(() => draw($('.hero__down path')), 2.9);
+  $$('.menu__hand path').forEach(p => draw(p, '.menu__hand', .2));
 
-  /* ---------- marquees (velocity-reactive) ---------- */
+  /* hero parallax (mild) */
+  gsap.to('.hero__img', { yPercent: 10, ease: 'none', scrollTrigger: { trigger: '.hero__media', start: 'top top+=100', end: 'bottom top', scrub: true } });
+  gsap.to('.hero__polaroid', { y: -50, rotation: -9, ease: 'none', scrollTrigger: { trigger: '.hero__media', start: 'top center', end: 'bottom top', scrub: true } });
+
+  /* marquee */
   const marquee = (sel, speed) => {
-    const track = $(sel); if (!track) return;
-    let x = 0, dir = 1, half = 0;
-    const measure = () => { half = track.scrollWidth / 2; };
-    measure(); addEventListener('resize', measure);
+    const track = $(sel); let x = 0, half = track.scrollWidth / 2;
+    addEventListener('resize', () => half = track.scrollWidth / 2);
     gsap.ticker.add(() => {
-      const v = lenis.velocity || 0;
-      if (Math.abs(v) > .5) dir = v > 0 ? 1 : -1;
-      x -= (speed + Math.abs(v) * .25) * dir;
-      if (x <= -half) x += half; if (x > 0) x -= half;
+      x -= speed + Math.min(Math.abs(lenis.velocity || 0) * .12, 4);
+      if (x <= -half) x += half;
       track.style.transform = `translate3d(${x}px,0,0)`;
     });
   };
-  marquee('.marquee__track', .9);
-  marquee('.footer__track', .6);
+  marquee('.marquee__track', .55); marquee('.footer__track', .35);
 
-  /* ---------- line reveals ---------- */
-  $$('.split-line > span').forEach(span => {
-    gsap.from(span, { yPercent: 110, duration: 1.3, ease: 'expo.out', scrollTrigger: { trigger: span.parentNode, start: 'top 88%' } });
+  /* headings: masked lines, each a bit different */
+  $$('[data-lines]').forEach((el, i) => {
+    gsap.from($$('.line-mask > span', el), { yPercent: 105, duration: 1 + (i % 3) * .15, ease: ['power3.out', 'power4.out', 'expo.out'][i % 3], stagger: .09, scrollTrigger: { trigger: el, start: 'top 85%' } });
   });
-  $$('.display:not([data-split-lines])').forEach(el => gsap.from(el, { y: 60, autoAlpha: 0, duration: 1.4, ease: 'expo.out', scrollTrigger: { trigger: el, start: 'top 88%' } }));
-  $$('.eyebrow').forEach(el => gsap.from(el, { y: 16, autoAlpha: 0, duration: 1, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 92%' } }));
-  $$('.body, .link-arrow, .terrace__text, .reserve__text, .btn--line').forEach(el => {
-    if (el.closest('.hero')) return;
-    gsap.from(el, { y: 30, autoAlpha: 0, duration: 1.2, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 92%' } });
-  });
+  $$('.h2:not([data-lines])').forEach(el => gsap.from(el, { autoAlpha: 0, y: 24, duration: .9, ease: 'power2.out', scrollTrigger: { trigger: el, start: 'top 85%' } }));
+  $$('[data-words]').forEach(el => gsap.to($$('.w', el), { opacity: 1, stagger: .08, ease: 'none', scrollTrigger: { trigger: el, start: 'top 78%', end: 'bottom 50%', scrub: .6 } }));
 
-  /* word-by-word scrub */
-  $$('[data-word-reveal]').forEach(el => {
-    gsap.to($$('.w', el), { opacity: 1, stagger: .1, ease: 'none', scrollTrigger: { trigger: el, start: 'top 80%', end: 'bottom 45%', scrub: true } });
-  });
+  /* story */
+  gsap.fromTo('.story__img--a .parallax', { yPercent: -6 }, { yPercent: 6, ease: 'none', scrollTrigger: { trigger: '.story__img--a', start: 'top bottom', end: 'bottom top', scrub: true } });
+  gsap.from('.story__img--a .frame', { clipPath: 'inset(0 100% 0 0)', duration: 1.3, ease: 'power3.inOut', scrollTrigger: { trigger: '.story__img--a', start: 'top 80%' } });
+  gsap.from('.story__img--b', { y: 80, rotation: 12, autoAlpha: 0, duration: 1.1, ease: 'back.out(1.2)', scrollTrigger: { trigger: '.story__img--b', start: 'top 92%' } });
+  gsap.from('.facts li', { autoAlpha: 0, y: 12, duration: .6, ease: 'power1.out', stagger: .08, scrollTrigger: { trigger: '.facts', start: 'top 90%' } });
 
-  /* image reveals + parallax */
-  $$('.story__img, .events__img').forEach(fig => {
-    gsap.fromTo(fig, { clipPath: 'inset(100% 0% 0% 0%)' }, { clipPath: 'inset(0% 0% 0% 0%)', duration: 1.6, ease: 'expo.inOut', scrollTrigger: { trigger: fig, start: 'top 85%' } });
-    const inner = $('.parallax', fig);
-    if (inner) gsap.fromTo(inner, { yPercent: -8 }, { yPercent: 8, ease: 'none', scrollTrigger: { trigger: fig, start: 'top bottom', end: 'bottom top', scrub: true } });
-  });
-
-  /* stats counters */
-  $$('[data-count]').forEach(el => {
-    const end = +el.dataset.count, pre = el.dataset.prefix || '', o = { v: 0 };
-    ScrollTrigger.create({ trigger: el, start: 'top 90%', once: true, onEnter: () => gsap.to(o, { v: end, duration: 2, ease: 'power3.out', onUpdate: () => el.textContent = pre + Math.round(o.v) }) });
-  });
-  gsap.from('.stats li', { y: 40, autoAlpha: 0, duration: 1.2, stagger: .1, ease: 'expo.out', scrollTrigger: { trigger: '.stats', start: 'top 88%' } });
-
-  /* ---------- horizontal pinned "Ein Tag" ---------- */
+  /* ---------- day: horizontal + morning→night colour ---------- */
   const mm = gsap.matchMedia();
+  // Tag → Nacht: lange hell, dann zügig dunkel (keine langen matschigen Zwischentöne)
+  const dayColours = (trigger, start, end) => gsap.timeline({ scrollTrigger: { trigger, start, end, scrub: .4 } })
+    .to('.day', { backgroundColor: '#e3d4bc', duration: 1.4, ease: 'none' })
+    .to('.day', { backgroundColor: '#24180f', color: '#f1e8d9', '--day-sub': 'rgba(241,232,217,.72)', duration: .45, ease: 'power1.inOut' })
+    .to('.day', { backgroundColor: '#1e1510', duration: .8, ease: 'none' });
   mm.add('(min-width: 901px)', () => {
     const track = $('.day__track');
     const dist = () => track.scrollWidth - innerWidth;
-    const h = gsap.to(track, { x: () => -dist(), ease: 'none', scrollTrigger: { trigger: '.day__pin', start: 'top top', end: () => '+=' + dist(), pin: true, scrub: 1, invalidateOnRefresh: true, anticipatePin: 1 } });
-    gsap.to('.day__progress i', { scaleX: 1, ease: 'none', scrollTrigger: { trigger: '.day__pin', start: 'top top', end: () => '+=' + dist(), scrub: true } });
-    $$('.day__img img').forEach(img => {
-      gsap.fromTo(img, { scale: 1.3, xPercent: -6 }, { scale: 1.05, xPercent: 6, ease: 'none', scrollTrigger: { trigger: img.parentNode, containerAnimation: h, start: 'left right', end: 'right left', scrub: true } });
-    });
+    const h = gsap.to(track, { x: () => -dist(), ease: 'none', scrollTrigger: { trigger: '.day__pin', start: 'top top', end: () => '+=' + dist(), pin: true, scrub: .8, invalidateOnRefresh: true, anticipatePin: 1 } });
+    dayColours('.day__pin', 'top top', () => '+=' + dist());
+    $$('.day__img img').forEach(img => gsap.fromTo(img, { xPercent: -5, scale: 1.15 }, { xPercent: 5, ease: 'none', scrollTrigger: { trigger: img.parentNode, containerAnimation: h, start: 'left right', end: 'right left', scrub: true } }));
   });
   mm.add('(max-width: 900px)', () => {
-    $$('.day__card').forEach(c => gsap.from(c, { y: 60, autoAlpha: 0, duration: 1.2, ease: 'expo.out', scrollTrigger: { trigger: c, start: 'top 88%' } }));
+    dayColours('.day__track', 'top 70%', 'bottom bottom');
+    $$('.day__card').forEach((c, i) => gsap.from(c, { y: 50, rotation: i % 2 ? 4 : -4, autoAlpha: 0, duration: .9, ease: 'power2.out', scrollTrigger: { trigger: c, start: 'top 88%' } }));
   });
 
-  /* ---------- menu hover reveal ---------- */
-  const reveal = $('.menu__reveal'), rImg = $('img', reveal);
-  if (finePointer) {
-    const qx = gsap.quickTo(reveal, 'x', { duration: .7, ease: 'power3' }), qy = gsap.quickTo(reveal, 'y', { duration: .7, ease: 'power3' });
-    let lastX = 0;
-    const qr = gsap.quickTo(reveal, 'rotation', { duration: .8, ease: 'power3' });
-    $('.menu__list').addEventListener('mousemove', e => { qx(e.clientX - 160); qy(e.clientY - 200); qr(gsap.utils.clamp(-12, 12, (e.clientX - lastX) * .6)); lastX = e.clientX; });
-    $$('.menu__item').forEach(item => {
-      item.addEventListener('mouseenter', () => {
-        rImg.src = item.dataset.img;
-        gsap.fromTo(rImg, { scale: 1.35 }, { scale: 1.1, duration: 1, ease: 'expo.out' });
-        gsap.to(reveal, { autoAlpha: 1, scale: 1, duration: .6, ease: 'expo.out' });
-      });
+  /* ---------- menu ---------- */
+  gsap.from('.menu__card', { y: 60, rotation: -2, duration: 1.2, ease: 'power3.out', scrollTrigger: { trigger: '.menu__card', start: 'top 85%' } });
+  $$('.menu__group').forEach((g, i) => gsap.from($$('.menu__cat, .menu__item', g), { autoAlpha: 0, y: 8, duration: .5, ease: 'power1.out', stagger: .05, delay: i * .15, scrollTrigger: { trigger: '.menu__card', start: 'top 70%' } }));
+  if (fine) {
+    const rv = $('.menu__reveal'), img = $('img', rv);
+    gsap.set(rv, { xPercent: -50, yPercent: -50 });
+    const qx = gsap.quickTo(rv, 'x', { duration: .45, ease: 'power2.out' }), qy = gsap.quickTo(rv, 'y', { duration: .45, ease: 'power2.out' });
+    $('.menu__card').addEventListener('mousemove', e => { qx(e.clientX + 210); qy(e.clientY - 30); });
+    $$('.menu__item').forEach((it, i) => {
+      new Image().src = it.dataset.img;
+      it.addEventListener('mouseenter', () => { img.src = it.dataset.img; gsap.to(rv, { autoAlpha: 1, rotation: i % 2 ? 3 : -3, duration: .3, ease: 'power2.out' }); });
+      it.addEventListener('mouseleave', () => gsap.to(rv, { autoAlpha: 0, duration: .2 }));
     });
-    $('.menu__list').addEventListener('mouseleave', () => gsap.to(reveal, { autoAlpha: 0, scale: .6, duration: .5, ease: 'power3.in' }));
-    $$('.menu__item').forEach(i => { const im = new Image(); im.src = i.dataset.img; });
   }
-  gsap.from('.menu__item', { y: 50, autoAlpha: 0, duration: 1.2, stagger: .07, ease: 'expo.out', scrollTrigger: { trigger: '.menu__list', start: 'top 85%' } });
 
-  /* ---------- terrace ---------- */
-  gsap.fromTo('.terrace__media img', { yPercent: -10, scale: 1.15 }, { yPercent: 10, scale: 1, ease: 'none', scrollTrigger: { trigger: '.terrace', start: 'top bottom', end: 'bottom top', scrub: true } });
+  /* terrace */
+  gsap.fromTo('.terrace__media img', { yPercent: -8 }, { yPercent: 8, ease: 'none', scrollTrigger: { trigger: '.terrace', start: 'top bottom', end: 'bottom top', scrub: true } });
+  gsap.from('.terrace__card', { y: 70, duration: 1.2, ease: 'power3.out', scrollTrigger: { trigger: '.terrace__card', start: 'top 95%' } });
 
-  /* ---------- gallery columns ---------- */
-  $$('.gallery__col').forEach(col => {
-    gsap.to(col, { yPercent: +col.dataset.speed, ease: 'none', scrollTrigger: { trigger: '.gallery__cols', start: 'top bottom', end: 'bottom top', scrub: true } });
+  /* gallery: each piece its own speed */
+  $$('.g').forEach(f => {
+    gsap.to(f, { yPercent: +f.dataset.speed, ease: 'none', scrollTrigger: { trigger: '.gallery__grid', start: 'top bottom', end: 'bottom top', scrub: true } });
+    if (f.classList.contains('polaroid')) gsap.from(f, { autoAlpha: 0, rotation: '+=8', duration: .9, ease: 'back.out(1.3)', scrollTrigger: { trigger: f, start: 'top 90%' } });
+    else gsap.from($('img', f), { scale: 1.15, autoAlpha: 0, duration: 1.4, ease: 'power2.out', scrollTrigger: { trigger: f, start: 'top 92%' } });
   });
-  $$('.gallery figure').forEach(f => gsap.fromTo(f, { clipPath: 'inset(0% 0% 100% 0%)' }, { clipPath: 'inset(0% 0% 0% 0%)', duration: 1.6, ease: 'expo.inOut', scrollTrigger: { trigger: f, start: 'top 90%' } }));
 
-  /* ---------- reserve ---------- */
-  gsap.from('.reserve__title .line > span', { yPercent: 110, duration: 1.4, stagger: .12, ease: 'expo.out', scrollTrigger: { trigger: '.reserve', start: 'top 70%' } });
-  gsap.from('.reserve__btn', { scale: 0, rotation: -90, duration: 1.6, ease: 'expo.out', scrollTrigger: { trigger: '.reserve__btn', start: 'top 92%' } });
-  gsap.from('.contact__col', { y: 50, autoAlpha: 0, duration: 1.2, stagger: .12, ease: 'expo.out', scrollTrigger: { trigger: '.contact', start: 'top 80%' } });
+  /* events */
+  gsap.fromTo('.events__img .parallax', { yPercent: -6 }, { yPercent: 6, ease: 'none', scrollTrigger: { trigger: '.events__img', start: 'top bottom', end: 'bottom top', scrub: true } });
+  gsap.from('.events__img', { clipPath: 'inset(0 0 0 100%)', duration: 1.2, ease: 'power3.inOut', scrollTrigger: { trigger: '.events__img', start: 'top 80%' } });
+  gsap.from('.events__polaroid', { y: 50, rotation: 10, autoAlpha: 0, duration: 1, ease: 'back.out(1.2)', scrollTrigger: { trigger: '.events__polaroid', start: 'top 90%' } });
 
-  /* ---------- custom cursor + magnetic ---------- */
-  if (finePointer) {
-    const cur = $('.cursor'), dot = $('.cursor__dot'), ring = $('.cursor__ring'), label = $('.cursor__label');
-    const dx = gsap.quickTo(dot, 'x', { duration: .12 }), dy = gsap.quickTo(dot, 'y', { duration: .12 });
-    const rx = gsap.quickTo(ring, 'x', { duration: .55, ease: 'power3' }), ry = gsap.quickTo(ring, 'y', { duration: .55, ease: 'power3' });
-    addEventListener('mousemove', e => { cur.classList.remove('is-hidden'); dx(e.clientX); dy(e.clientY); rx(e.clientX); ry(e.clientY); });
-    document.addEventListener('mouseleave', () => cur.classList.add('is-hidden'));
-    document.addEventListener('mouseenter', () => cur.classList.remove('is-hidden'));
-    $$('[data-cursor]').forEach(el => {
-      el.addEventListener('mouseenter', () => { label.textContent = el.dataset.cursor; cur.classList.add('is-label'); });
-      el.addEventListener('mouseleave', () => cur.classList.remove('is-label'));
-    });
-    $$('a, button, .menu__item').forEach(el => {
-      el.addEventListener('mouseenter', () => { if (el.hasAttribute('data-cursor-hide')) cur.classList.add('is-hidden'); else cur.classList.add('is-hover'); });
-      el.addEventListener('mouseleave', () => cur.classList.remove('is-hover', 'is-hidden'));
-    });
-    $$('[data-magnetic]').forEach(el => {
-      const s = el.classList.contains('reserve__btn') ? .45 : .3;
-      const mx = gsap.quickTo(el, 'x', { duration: .8, ease: 'elastic.out(1,.4)' }), my = gsap.quickTo(el, 'y', { duration: .8, ease: 'elastic.out(1,.4)' });
-      el.addEventListener('mousemove', e => { const r = el.getBoundingClientRect(); mx((e.clientX - r.left - r.width / 2) * s); my((e.clientY - r.top - r.height / 2) * s); });
-      el.addEventListener('mouseleave', () => { mx(0); my(0); });
-    });
-  }
+  /* reserve & contact */
+  gsap.from('.reserve__phone', { yPercent: 30, autoAlpha: 0, duration: 1, ease: 'power4.out', scrollTrigger: { trigger: '.reserve__phone', start: 'top 92%' } });
+  gsap.from('.sign', { rotation: -10, y: -30, duration: 1.6, ease: 'elastic.out(1,.45)', scrollTrigger: { trigger: '.sign', start: 'top 85%' } });
 
   addEventListener('load', () => ScrollTrigger.refresh());
 })();
