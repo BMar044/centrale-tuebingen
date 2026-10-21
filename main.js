@@ -58,6 +58,45 @@
   $('.voices__next').addEventListener('click', () => { showVoice((vi + 1) % voices.length); auto(); });
   auto();
 
+  /* ---------- Speisekarte auf Touch: antippen → Foto inline ---------- */
+  const touch = !fine && matchMedia('(hover: none), (pointer: coarse)').matches;
+  if (touch) {
+    root.classList.add('has-touch');
+    const anim = motion && window.gsap;
+    let openItem = null;
+    const close = item => {
+      const panel = $('.menu__tap', item); if (!panel) return;
+      item.classList.remove('is-open'); item.setAttribute('aria-expanded', 'false');
+      if (anim) gsap.to(panel, { height: 0, opacity: 0, duration: .3, ease: 'power2.in', onComplete: () => panel.remove() });
+      else panel.remove();
+    };
+    const open = (item, idx) => {
+      const name = $('h4', item).textContent;
+      const panel = document.createElement('div');
+      panel.className = 'menu__tap';
+      // Bild wird erst beim Antippen geladen (kein Vorab-Download aller Fotos auf Mobil)
+      panel.innerHTML = `<figure class="polaroid" style="--r:${idx % 2 ? 2.5 : -2.5}deg"><img src="${item.dataset.img}" alt="${name}" decoding="async" /><figcaption>${name.toLowerCase()}</figcaption></figure>`;
+      item.appendChild(panel);
+      item.classList.add('is-open'); item.setAttribute('aria-expanded', 'true');
+      if (anim) {
+        gsap.from(panel, { height: 0, opacity: 0, duration: .45, ease: 'power3.out' });
+        gsap.from($('.polaroid', panel), { y: -18, rotation: idx % 2 ? 9 : -9, scale: .92, duration: .6, ease: 'back.out(1.6)', delay: .05 });
+      }
+    };
+    $$('.menu__item').forEach((item, idx) => {
+      item.setAttribute('role', 'button'); item.setAttribute('tabindex', '0'); item.setAttribute('aria-expanded', 'false');
+      const toggle = e => {
+        const wasOpen = openItem === item;
+        if (openItem) close(openItem);
+        openItem = null;
+        if (!wasOpen) { open(item, idx); openItem = item; }
+        if (window.ScrollTrigger) setTimeout(() => ScrollTrigger.refresh(), 500);
+      };
+      item.addEventListener('click', toggle);
+      item.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(e); } });
+    });
+  }
+
   if (!motion || !window.gsap) { document.body.classList.remove('is-loading'); return; }
   gsap.registerPlugin(ScrollTrigger);
 

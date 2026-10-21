@@ -277,3 +277,15 @@ html.motion .big-text .w{opacity:.22}
 /* ohne Motion: Tagesleiste einfach seitlich scrollbar */
 html:not(.motion) .day__pin{height:auto;overflow-x:auto;padding:40px 0 90px;scroll-snap-type:x proximity}
 html:not(.motion) .day__card{scroll-snap-align:start}
+/* Touch: Gericht antippen → Polaroid inline */
+.menu__tap-hint{display:none}
+html.has-touch .menu__tap-hint{display:block;text-align:center;font-size:22px;margin:-14px 0 22px;transform:rotate(-2deg)}
+html.has-touch .menu__item{position:relative;padding-right:40px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+html.has-touch .menu__item::after{content:"";position:absolute;right:4px;top:17px;width:24px;height:24px;border:1px solid var(--rule);border-radius:50%;background:linear-gradient(var(--tomato),var(--tomato)) center/10px 1.5px no-repeat,linear-gradient(var(--tomato),var(--tomato)) center/1.5px 10px no-repeat;transition:transform .35s cubic-bezier(.3,.7,.2,1),border-color .25s}
+html.has-touch .menu__item.is-open::after{transform:rotate(45deg);border-color:var(--tomato)}
+html.has-touch .menu__item.is-open h4{color:var(--tomato)}
+html.has-touch .menu__item:focus-visible{outline:2px solid var(--tomato);outline-offset:4px}
+.menu__tap{overflow:hidden;padding:0 14px 22px;margin:0 -14px}
+.menu__tap .polaroid{width:min(62%,230px);margin:16px 0 10px 6px;padding:8px 8px 0}
+.menu__tap .polaroid img{aspect-ratio:4/5;background:var(--paper-2)}
+.menu__tap .polaroid figcaption{font-size:18px;padding:6px 2px 8px}
